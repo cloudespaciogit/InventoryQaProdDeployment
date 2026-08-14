@@ -14,6 +14,6 @@ public class trialClass {
 
         insert acc;
 
-        return acc.Id;  //2ndtest
+        return acc.Id;  //2ndtest //NVNTRSS-17 Jira GitHub integration test
     }
 }
