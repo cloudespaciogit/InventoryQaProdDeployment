@@ -1,0 +1,31 @@
+name: Deploy to InventoryDev
+
+on:
+  push:
+    branches:
+      - devOrgTrial
+
+jobs:
+  deploy-to-InventoryDev:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli
+
+      - name: Authenticate to Inventory Org
+        run: |
+          echo "${{ secrets.SF_INVENTORY_AUTH_URL }}" > inventory-auth-url.txt
+          sf org login sfdx-url \
+            --sfdx-url-file inventory-auth-url.txt \
+            --alias inventoryOrg
+
+      - name: Deploy Salesforce Metadata to Inventory
+        run: |
+          sf project deploy start \
+            --source-dir force-app \
+            --target-org inventoryOrg \
+            --wait 30
